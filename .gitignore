@@ -1,0 +1,4 @@
+.vscode
+*.png
+__pycache__
+*.egg-info
