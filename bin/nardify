@@ -9,14 +9,14 @@ import signal
 from Bio import SeqIO
 from io import StringIO
 from datetime import datetime
-from argparse import ArgumentParser
-from nardini.core import NUM_SEQUENCES, typeall
+from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
+from nardini.core import NUM_SCRAMBLED_SEQUENCES, typeall
 from nardini.utils import parallelize
 from nardini.score_and_plot import calculate_and_plot
 
 
 DEFAULT_NUM_CPUS = 1
-DEFAULT_RANDOM_SEED = 0
+DEFAULT_RANDOM_SEED = None
 
 
 # -------------------------------------------------------------------------------------------------
@@ -56,17 +56,26 @@ def validate_sequences(sequence_or_filename, default_name='fasta'):
         fake_record = SeqIO.read(StringIO(fasta), 'fasta')
         sequences.append(fake_record)
 
+    print('Number of sequences read: {num}'.format(num=len(sequences)), end='\n\n')
     return sequences
 
+
+def set_random_seed(random_seed):
+    if random_seed == DEFAULT_RANDOM_SEED:
+        random_seed = int(datetime.now().timestamp())
+        print(f'No random seed specified. Using generated random seed: {random_seed}\n')
+    else:
+        print(f'Using user-supplied random seed: {random_seed}\n')
+    return random_seed
 
 
 # -------------------------------------------------------------------------------------------------
 
 
 def main():
-    parser = ArgumentParser()
+    parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
     parser.add_argument('sequences',
-                        help='The sequence or filename containing the sequences to be analyzed.',
+                        help='The sequence, or filename containing FASTA sequences to be analyzed.',
                         type=str,
                         default=None)
 
@@ -80,20 +89,16 @@ def main():
                         type=int,
                         default=DEFAULT_RANDOM_SEED)
 
-    parser.add_argument('-n', '--num-sequences',
+    parser.add_argument('-n', '--num-scrambled-sequences',
                         help='The number of sequences to generate while bootstrapping.',
                         type=int,
-                        default=NUM_SEQUENCES)
+                        default=NUM_SCRAMBLED_SEQUENCES)
 
     args = parser.parse_args()
-    random_seed = args.random_seed
-    if random_seed == DEFAULT_RANDOM_SEED:
-        random_seed = int(datetime.now().timestamp())
-        print(f'Using random seed: {random_seed}')
+    random_seed = set_random_seed(args.random_seed)
 
     seq_records = validate_sequences(args.sequences)
-
-    calculate_and_plot(seq_records, typeall, args.num_sequences)
+    calculate_and_plot(seq_records, typeall, args.num_scrambled_sequences, random_seed)
 
 
 

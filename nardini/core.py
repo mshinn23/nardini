@@ -4,7 +4,7 @@ import random
 import scipy.stats as stats
 
 
-NUM_SEQUENCES = 10000
+NUM_SCRAMBLED_SEQUENCES = 10000
 
 
 pol = ['S','T','N','Q','C','H']
@@ -118,7 +118,7 @@ def get_org_seq_vals(myseq, typeall, fracsall):
 
 
 def get_scramble_seqs_vals(myseq, num_seqs, typeall, fracsall, random_seed=None):
-    if random_seed is not None:
+    if random_seed is not None and type(random_seed) is int:
         random.seed(random_seed)
         np.random.seed(random_seed)  # for `scipy.stats` (and consistency)
 

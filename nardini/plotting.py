@@ -8,7 +8,7 @@ def plot_zscore_matrix(seq_name, zvec_db, typeall, savename, is_scrambled):
     num_types = len(typeall)
     reshaped_zvec_db = np.array(zvec_db[0, :]).reshape((num_types, num_types))
 
-    fig = plt.figure()
+    fig = plt.figure(figsize=(8, 6))
     ax = fig.add_subplot(1, 1, 1)
     img = ax.imshow(reshaped_zvec_db, vmin=-3, vmax=3, cmap='bwr', aspect='auto')
     fig.colorbar(img)
