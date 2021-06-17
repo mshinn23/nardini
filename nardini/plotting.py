@@ -3,10 +3,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def plot_zscore_matrix(seq_name, zvec_db, typeall, savename, is_scrambled):
+def plot_zscore_matrix(seq_name, zvec_db, typeall, index, savename, is_scrambled):
     x_label_list = ['µ', 'h', '+', '-', 'π', 'A', 'P', 'G']
     num_types = len(typeall)
-    reshaped_zvec_db = np.array(zvec_db[0, :]).reshape((num_types, num_types))
+    reshaped_zvec_db = np.array(zvec_db[index, :]).reshape((num_types, num_types))
 
     fig = plt.figure(figsize=(8, 6))
     ax = fig.add_subplot(1, 1, 1)

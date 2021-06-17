@@ -64,11 +64,11 @@ def calculate_and_plot(orthseqs, typeall, num_seqs, random_seed):
         zscore_scrambled_savename = f'scrambled-{seq_name}.png'
 
         print(f'[ 5 / 8 ] Plotting Z-Score Matrix for FASTA: "{seq_name}"...')
-        plot_zscore_matrix(seq_name, zvecdb, typeall, zscore_savename, is_scrambled=False)
+        plot_zscore_matrix(seq_name, zvecdb, typeall, countseqs, zscore_savename, is_scrambled=False)
         print(f'[ 6 / 8 ] Plot of Z-Score matrix saved as: "{zscore_savename}".')
 
         print(f'[ 7 / 8 ] Plotting Scrambled Z-Score Matrix for FASTA: "{seq_name}"...')
-        plot_zscore_matrix(seq_name, zvecdbscr, typeall, zscore_scrambled_savename, is_scrambled=True)
+        plot_zscore_matrix(seq_name, zvecdbscr, typeall, countseqs, zscore_scrambled_savename, is_scrambled=True)
         print(f'[ 8 / 8 ] Plot of Scrambled Z-Score matrix saved as: "{zscore_scrambled_savename}".')
         print(end='\n\n')
     end = datetime.now()
