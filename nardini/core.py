@@ -4,7 +4,7 @@ import random
 import scipy.stats as stats
 
 
-NUM_SCRAMBLED_SEQUENCES = 10000
+NUM_SCRAMBLED_SEQUENCES = 100000
 
 
 pol = ['S','T','N','Q','C','H']
@@ -29,7 +29,7 @@ def count_residues_in_sequence(sequence, residue_types):
 
 
 def get_kappa(seq, type1, type2):
-    blobsz = [5, 6]
+    blobsz = [5]
     kappab = list()
     for b in blobsz:
         # Get full sequence asymmetry
@@ -69,7 +69,7 @@ def get_kappa(seq, type1, type2):
 
 
 def get_omega(seq, type1):
-    blobsz = [5, 6]
+    blobsz = [5]
     omegab = []
     for b in blobsz:
         # Get full sequence asymmetry
