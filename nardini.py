@@ -96,10 +96,10 @@ def get_org_seq_vals(myseq,typeall,fracsall):
         for count2 in range(count1,len(typeall)):
             type2 = typeall[count2]
 
-            if type1 == type2 and fracsall[count1]>0.10:
+            if type1 == type2 and fracsall[count1]>0.12:
                 org_seq_arr[count1, count2]=get_omega(myseq,type1)
                 
-            if type1 != type2 and fracsall[count1]>0.10 and fracsall[count2]>0.10:
+            if type1 != type2 and fracsall[count1]>0.12 and fracsall[count2]>0.12:
                 org_seq_arr[count1, count2]=get_kappa(myseq,type1,type2)
     
     org_seq_1d=org_seq_arr.reshape([1, len(typeall)**2])
@@ -124,10 +124,10 @@ def get_scramble_seqs_vals(myseq,num_seqs,typeall,fracsall):
             for count2 in range(count1,len(typeall)):
                 type2 = typeall[count2]
 
-                if type1 == type2 and fracsall[count1]>0.10:
+                if type1 == type2 and fracsall[count1]>0.12:
                     scr_seq_arr[count1, count2]=get_omega(currseq,type1)
 
-                if type1 != type2 and fracsall[count1]>0.10 and fracsall[count2]>0.10:
+                if type1 != type2 and fracsall[count1]>0.12 and fracsall[count2]>0.12:
                     scr_seq_arr[count1, count2]=get_kappa(currseq,type1,type2)
         
         scr_vals[x,0:len(typeall)**2] = scr_seq_arr.reshape([1, len(typeall)**2])
@@ -160,7 +160,7 @@ def get_scramble_seqs_vals(myseq,num_seqs,typeall,fracsall):
 #input sequence
 orthseqs=['IEQEKDVTKPQRPSLNQSIKTHNQSVPKREPKREEPQQQNTVSRHTSQPA']
 
-num_seqs=10000
+num_seqs=100000
 pol=['S','T','N','Q','C','H']
 hyd=['I','L','M','V']
 pos=['R','K']
