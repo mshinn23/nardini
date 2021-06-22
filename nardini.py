@@ -11,7 +11,7 @@ import math
 
 
 def get_kappa(seq,type1,type2):
-    blobsz=[5,6]
+    blobsz=[5]
     kappab=[]
     for b in blobsz:
         # Get full sequence asymmetry
@@ -54,7 +54,7 @@ def get_kappa(seq,type1,type2):
 
     
 def get_omega(seq,type1):
-    blobsz=[5,6]
+    blobsz=[5]
     omegab=[]
     for b in blobsz:
         # Get full sequence asymmetry
