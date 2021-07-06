@@ -107,10 +107,10 @@ def get_org_seq_vals(myseq, typeall, fracsall):
         for count2 in range(count1, type_all_len):
             type2 = typeall[count2]
 
-            if type1 == type2 and fracsall[count1] > 0.10:
+            if type1 == type2 and fracsall[count1] > 0.12:
                 org_seq_arr[count1, count2] = get_omega(myseq, type1)
 
-            if type1 != type2 and fracsall[count1] > 0.10 and fracsall[count2] > 0.10:
+            if type1 != type2 and fracsall[count1] > 0.12 and fracsall[count2] > 0.12:
                 org_seq_arr[count1, count2] = get_kappa(myseq,type1,type2)
 
     org_seq_1d = org_seq_arr.reshape([1, type_all_len**2])
@@ -137,10 +137,10 @@ def get_scramble_seqs_vals(myseq, num_seqs, typeall, fracsall, random_seed=None)
             for count2 in range(count1, type_all_len):
                 type2 = typeall[count2]
 
-                if type1 == type2 and fracsall[count1] > 0.10:
+                if type1 == type2 and fracsall[count1] > 0.12:
                     scr_seq_arr[count1, count2] = get_omega(currseq, type1)
 
-                if type1 != type2 and fracsall[count1] > 0.10 and fracsall[count2] > 0.10:
+                if type1 != type2 and fracsall[count1] > 0.12 and fracsall[count2] > 0.12:
                     scr_seq_arr[count1, count2] = get_kappa(currseq, type1, type2)
 
         scr_vals[x, 0:type_all_len**2] = scr_seq_arr.reshape([1, type_all_len**2])
