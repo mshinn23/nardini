@@ -18,13 +18,15 @@ setup(
     license='GPL v2',
     url='https://github.com/mshinn23/nardini',
     packages=['nardini'],
-    scripts=['bin/nardify'],
+    scripts=['bin/nardini'],
     python_requires='>=3.5',
     install_requires=[
         'BioPython>=1.75',
         'matplotlib>=3.3',
         'numpy>=1.19',
-        'scipy>=1.5'
+        'scipy>=1.5',
+        'pandas>=1.2',
+        'tabulate>=0.8'
     ],
     include_package_data=True,
     zip_safe=True

@@ -15,7 +15,6 @@ from nardini.utils import parallelize
 from nardini.score_and_plot import calculate_and_plot
 
 
-DEFAULT_NUM_CPUS = 1
 DEFAULT_RANDOM_SEED = None
 
 
@@ -78,11 +77,6 @@ def main():
                         help='The sequence, or filename containing FASTA sequences to be analyzed.',
                         type=str,
                         default=None)
-
-    parser.add_argument('-c', '--num-cpus',
-                        help='The number of CPUs to use (virtual / physical).',
-                        type=int,
-                        default=DEFAULT_NUM_CPUS)
 
     parser.add_argument('-s', '--random-seed',
                         help='The random seed to use for generating the random distribution.',
