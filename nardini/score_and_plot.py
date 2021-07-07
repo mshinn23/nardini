@@ -24,17 +24,31 @@ def export_analysis(to_export):
     d['ID'] = list()
     d['original_seq'] = list()
     d['most_similar_seq'] = list()
+    d['sum_abs_zscore_original_seq'] = list()
+    d['sum_abs_zscore_scrambled_seq'] = list()
     for seq_id in to_export:
-        oseq, sseq, zplot, splot = to_export[seq_id]
+        oseq, sseq, zplot, splot, zm, sm = to_export[seq_id]
+        z_abs_sum = np.sum(abs(zm))
+        s_abs_sum = np.sum(abs(sm))
+
         d['ID'].append(seq_id)
         d['original_seq'].append(oseq)
         d['most_similar_seq'].append(sseq)
+        d['sum_abs_zscore_original_seq'].append(z_abs_sum)
+        d['sum_abs_zscore_scrambled_seq'].append(s_abs_sum)
+
         zfile.write(zplot, os.path.basename(zplot))
         zfile.write(splot, os.path.basename(splot))
-        df = pd.DataFrame(d)
-        tsv_content = tabulate(df.values.tolist(), list(df.columns), tablefmt="plain")
-        zfile.writestr('sequences.tsv', tsv_content)
-        zfile.close()
+
+        z_content = tabulate(zm, ['µ', 'h', '+', '-', 'π', 'A', 'P', 'G'], tablefmt='plain')
+        s_content = tabulate(sm, ['µ', 'h', '+', '-', 'π', 'A', 'P', 'G'], tablefmt='plain')
+        zfile.writestr(f'zscore-original-sequence-{seq_id}.tsv', z_content)
+        zfile.writestr(f'zscore-scrambled-sequence-{seq_id}.tsv', s_content)
+
+    df = pd.DataFrame(d)
+    tsv_content = tabulate(df.values.tolist(), list(df.columns), tablefmt="plain")
+    zfile.writestr('sequences.tsv', tsv_content)
+    zfile.close()
     print(f'Analysis results saved to: "{zip_filename}"')
 
 
@@ -112,7 +126,7 @@ def calculate_and_plot(orthseqs, typeall, num_seqs, random_seed):
         print(f'[ SEQ: {seq_name} | 8 / 8 ] Plot of Scrambled Z-Score matrix saved as: "{zscore_scrambled_savename}".')
         print(end='\n\n')
 
-        to_export[seq_name] = (myseq, allscrseqs[idx], zscore_savename, zscore_scrambled_savename)
+        to_export[seq_name] = (myseq, allscrseqs[idx], zscore_savename, zscore_scrambled_savename, reshaped_zvecdb, reshaped_zvecdbscr)
 
     export_analysis(to_export)
 
