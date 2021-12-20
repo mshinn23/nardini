@@ -4,10 +4,8 @@
 import random
 import numpy as np
 import matplotlib.pyplot as plt
-#import localcider
 import scipy.stats as stats
 import math
-#from localcider.sequenceParameters import SequenceParameters
 
 
 def get_kappa(seq,type1,type2):
