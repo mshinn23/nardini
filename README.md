@@ -82,11 +82,22 @@ elif type(sequence_or_filename) is str:
     sequences.append(fasta_record)
 
 # After preparing the sequences, we can finally perform the calculations and save
-# the analysis.
+# the analysis. Here, `typeall` refers to the coarse-graining of amino acids by a given
+# type to improve the search of similar sequences. The default number of types is
+# 8:
+#
+# pol = ['S','T','N','Q','C','H']
+# hyd = ['I','L','M','V']
+# pos = ['R','K']
+# neg = ['E','D']
+# aro = ['F','W','Y']
+# ala = ['A']
+# pro = ['P']
+# gly = ['G']
 calculate_and_plot(sequences, typeall, NUM_SCRAMBLED_SEQUENCES, RANDOM_SEED)
 ```
 
-This example will produce a filename with a randomly generated name such as: `nardini-data-SSDF5M91UQ.zip`.
+This example will produce a filename with a randomly generated name such as: `nardini-data-SSDF5M91UQ.zip`. The ZIP file will contain the file `sequences.tsv` (the sequences analyzed). And, for every sequence included, 4 files additional will also be included: `regular-<seq_name>.png` (the plot of the Nardini matrix of the original sequence), `scrambled-<seq_name>.png` (the plot of the Nardini matrix of the closest matching scrambled sequence), `zscore-original-sequence-<seq_name>.tsv` (the text file corresponding to the z-score matrix of the original sequence), and `zscore-scrambled-sequence-<seq_name>.tsv` (the text file corresponding to the z-score matrix of the scrambled sequence).
 
 ## Isolated Analysis
 
@@ -129,6 +140,19 @@ elif type(sequence_or_filename) is str:
 # 3. The sequence number (used for book-keeping for many sequences).
 # 4. The `reshaped_zvecdb` corresponding to the original sequence.
 # 5. The `reshaped_zvecdbscr` corresponding to the scrambled sequences.
+#
+# Here, `typeall` refers to the coarse-graining of amino acids by a given
+# type to improve the search of similar sequences. The default number of types is
+# 8:
+#
+# pol = ['S','T','N','Q','C','H']
+# hyd = ['I','L','M','V']
+# pos = ['R','K']
+# neg = ['E','D']
+# aro = ['F','W','Y']
+# ala = ['A']
+# pro = ['P']
+# gly = ['G']
 data_to_export = calculate_zscore(sequences, typeall, NUM_SCRAMBLED_SEQUENCES, RANDOM_SEED)
 ```
 
