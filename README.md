@@ -101,7 +101,7 @@ This example will produce a filename with a randomly generated name such as: `na
 
 ## Isolated Analysis
 
-This scenario is suited for a case where the user desires to perform additional analysis on the Nardini z-score matrices. Hence,
+This scenario is suited for a case where the user desires to perform additional analysis on the Nardini z-score matrices.
 
 ```
 import os
@@ -158,7 +158,7 @@ data_to_export = calculate_zscore(sequences, typeall, NUM_SCRAMBLED_SEQUENCES, R
 
 # Citation
 
-If you use the Nardini package for published scientific research, please cite it. For e.g., the BibTeX entry is:
+If you use the Nardini package for scientific research that will be published, please cite it. For e.g., the BibTeX entry for the Nardini manuscript is:
 
 ```
 @article{cohan2021uncovering,
@@ -173,6 +173,6 @@ If you use the Nardini package for published scientific research, please cite it
 
 # Contributing
 
-If you're interested in contributing to the development of Nardini - be it bug fixes, suggestions, edits, or extensions - please do the following. To submit identified bugs as well as suggestions (i.e. ideas), please open a ticket under [Issues](https://github.com/mshinn23/nardini/issues); and, for direct edits and  extensions to the package, please submit a [Pull Request](https://github.com/mshinn23/nardini/pulls).
+If you're interested in contributing to the development of Nardini - be it bug fixes, suggestions, edits, or extensions - please do the following. To submit identified bugs as well as suggestions (including ideas), please open a ticket under [Issues](https://github.com/mshinn23/nardini/issues); and, for direct edits and extensions to the package, please submit a [Pull Request](https://github.com/mshinn23/nardini/pulls).
 
 This is an overview of [Github's Issues](https://docs.github.com/en/issues/tracking-your-work-with-issues/about-issues), as well as [Github's Pull Requests](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests) and how they can be used to aid development.
