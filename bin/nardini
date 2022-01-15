@@ -12,7 +12,7 @@ from datetime import datetime
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 from nardini.core import NUM_SCRAMBLED_SEQUENCES, typeall
 from nardini.utils import parallelize
-from nardini.score_and_plot import calculate_and_plot
+from nardini.score_and_plot import calculate_zscore_and_plot
 
 
 DEFAULT_RANDOM_SEED = None
@@ -92,7 +92,7 @@ def main():
     random_seed = set_random_seed(args.random_seed)
 
     seq_records = validate_sequences(args.sequences)
-    calculate_and_plot(seq_records, typeall, args.num_scrambled_sequences, random_seed)
+    calculate_zscore_and_plot(seq_records, typeall, args.num_scrambled_sequences, random_seed)
 
 
 
