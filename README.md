@@ -57,7 +57,7 @@ import os
 import time
 from Bio import SeqIO
 from nardini.core import NUM_SCRAMBLED_SEQUENCES, typeall
-from nardini.score_and_plot import calculate_and_plot
+from nardini.score_and_plot import calculate_zscore_and_plot
 
 
 # Define a random seed based on the current time.
@@ -70,7 +70,7 @@ sequences = list()
 
 # Prepare the sequences by using BioPython to read in FASTA records
 # Or, create a fasta record from the sequence.
-if os.path.exist(sequence_or_filename):
+if os.path.exists(sequence_or_filename):
     with open(sequence_or_filename, 'r') as seqfile:
         sequences = list(SeqIO.parse(seqfile, 'fasta'))
 
@@ -94,7 +94,7 @@ elif type(sequence_or_filename) is str:
 # ala = ['A']
 # pro = ['P']
 # gly = ['G']
-calculate_and_plot(sequences, typeall, NUM_SCRAMBLED_SEQUENCES, RANDOM_SEED)
+calculate_zscore_and_plot(sequences, typeall, NUM_SCRAMBLED_SEQUENCES, RANDOM_SEED)
 ```
 
 This example will produce a filename with a randomly generated name such as: `nardini-data-SSDF5M91UQ.zip`. The ZIP file will contain the file `sequences.tsv` (the sequences analyzed). And, for every sequence included, 4 files additional will also be included: `regular-<seq_name>.png` (the plot of the Nardini matrix of the original sequence), `scrambled-<seq_name>.png` (the plot of the Nardini matrix of the closest matching scrambled sequence), `zscore-original-sequence-<seq_name>.tsv` (the text file corresponding to the z-score matrix of the original sequence), and `zscore-scrambled-sequence-<seq_name>.tsv` (the text file corresponding to the z-score matrix of the scrambled sequence).
@@ -119,7 +119,7 @@ sequence_or_filename = 'your_sequence_or_path_here'
 sequences = list()
 
 
-if os.path.exist(sequence_or_filename):
+if os.path.exists(sequence_or_filename):
     with open(sequence_or_filename, 'r') as seqfile:
         sequences = list(SeqIO.parse(seqfile, 'fasta'))
 
