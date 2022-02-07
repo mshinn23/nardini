@@ -88,12 +88,16 @@ def main():
                         type=int,
                         default=NUM_SCRAMBLED_SEQUENCES)
 
+    parser.add_argument('-ic', '--include-closest-scrambled-sequence',
+                        help='The presence of this flag determines whether or not to include the closest matching sequence and its analysis in the results.',
+                        action='store_true',
+                        default=False)
+
     args = parser.parse_args()
     random_seed = set_random_seed(args.random_seed)
 
     seq_records = validate_sequences(args.sequences)
-    calculate_zscore_and_plot(seq_records, typeall, args.num_scrambled_sequences, random_seed)
-
+    calculate_zscore_and_plot(seq_records, typeall, args.num_scrambled_sequences, random_seed, args.include_closest_scrambled_sequence)
 
 
 if __name__ == '__main__':
