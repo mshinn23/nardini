@@ -51,11 +51,10 @@ def determine_savename_from_previous_results(directory=None):
         next_version = previous_nardini_results[-1][0] + 1
 
     savename_for_results = NARDINI_ZIPFILE_SAVENAME_FORMAT % next_version
-    print(previous_nardini_results, savename_for_results)
     return savename_for_results
 
 
-def export_analysis(to_export):
+def export_analysis(to_export, include_closest_match):
     zip_filename = determine_savename_from_previous_results()
     zip_filepath = os.path.join(zip_filename)
     zfile = ZipFile(zip_filepath, 'w')
@@ -64,9 +63,11 @@ def export_analysis(to_export):
     d = dict()
     d['ID'] = list()
     d['original_seq'] = list()
-    d['most_similar_seq'] = list()
     d['sum_abs_zscore_original_seq'] = list()
-    d['sum_abs_zscore_scrambled_seq'] = list()
+    if include_closest_match:
+        d['most_similar_seq'] = list()
+        d['sum_abs_zscore_scrambled_seq'] = list()
+
     for seq_id in to_export:
         oseq, sseq, index, zplot, splot, zm, sm = to_export[seq_id]
         z_abs_sum = np.sum(abs(zm))
@@ -74,17 +75,18 @@ def export_analysis(to_export):
 
         d['ID'].append(seq_id)
         d['original_seq'].append(oseq)
-        d['most_similar_seq'].append(sseq)
         d['sum_abs_zscore_original_seq'].append(z_abs_sum)
-        d['sum_abs_zscore_scrambled_seq'].append(s_abs_sum)
+
+        if include_closest_match:
+            d['most_similar_seq'].append(sseq)
+            d['sum_abs_zscore_scrambled_seq'].append(s_abs_sum)
+            zfile.write(splot, os.path.basename(splot))
+            s_content = tabulate(sm, ['µ', 'h', '+', '-', 'π', 'A', 'P', 'G'], tablefmt='plain')
+            zfile.writestr(f'zscore-scrambled-sequence-{seq_id}.tsv', s_content)
 
         zfile.write(zplot, os.path.basename(zplot))
-        zfile.write(splot, os.path.basename(splot))
-
         z_content = tabulate(zm, ['µ', 'h', '+', '-', 'π', 'A', 'P', 'G'], tablefmt='plain')
-        s_content = tabulate(sm, ['µ', 'h', '+', '-', 'π', 'A', 'P', 'G'], tablefmt='plain')
         zfile.writestr(f'zscore-original-sequence-{seq_id}.tsv', z_content)
-        zfile.writestr(f'zscore-scrambled-sequence-{seq_id}.tsv', s_content)
 
     df = pd.DataFrame(d)
     tsv_content = tabulate(df.values.tolist(), list(df.columns), tablefmt="plain")
@@ -93,7 +95,7 @@ def export_analysis(to_export):
     print(f'Analysis results saved to: "{zip_filename}"')
 
 
-def calculate_zscore_and_plot(orthseqs, typeall, num_seqs, random_seed):
+def calculate_zscore_and_plot(orthseqs, typeall, num_seqs, random_seed, include_closest_match=True):
     olen        = len(orthseqs)
     tlen        = len(typeall)
     zvecdb      = np.zeros((olen, tlen**2))
@@ -168,7 +170,7 @@ def calculate_zscore_and_plot(orthseqs, typeall, num_seqs, random_seed):
 
         to_export[seq_name] = (myseq, allscrseqs[idx], countseqs, zscore_savename, zscore_scrambled_savename, reshaped_zvecdb, reshaped_zvecdbscr)
 
-    export_analysis(to_export)
+    export_analysis(to_export, include_closest_match)
 
     end = datetime.now()
     print('Total processing time: {}'.format(end - start))
