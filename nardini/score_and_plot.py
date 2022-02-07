@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import re
 import math
 import string
 import random
@@ -13,9 +14,49 @@ from nardini.core import get_org_seq_vals, get_scramble_seqs_vals
 from nardini.plotting import plot_zscore_matrix
 
 
+NARDINI_ZIPFILE_SAVENAME_FORMAT = 'nardini-data-%d.zip'
+
+
+def get_nardini_results_versions(nardini_files):
+    nardini_format = 'nardini-data-(\\d+).zip'
+    regex = re.compile(nardini_format)
+
+    versions = list()
+    for filename in nardini_files:
+        match = regex.search(filename)
+        if match is None:
+            continue
+        version_num = int(match.group(1))
+        version = (version_num, filename)
+        versions.append(version)
+    sorted_versions = list(sorted(versions, key=lambda x: x[0]))
+    return sorted_versions
+
+
+# Look for other Nardini-results in the current working directory
+def find_previous_nardini_results(directory=None):
+    cwd = directory
+    if directory is None:
+        cwd = os.getcwd()
+
+    cwd_files = [f for f in os.listdir(cwd) if os.path.isfile(os.path.join(cwd, f))]
+    previous_nardini_results = get_nardini_results_versions(cwd_files)
+    return previous_nardini_results
+
+
+def determine_savename_from_previous_results(directory=None):
+    next_version = 1
+    previous_nardini_results = find_previous_nardini_results(directory)
+    if len(previous_nardini_results) > 0:
+        next_version = previous_nardini_results[-1][0] + 1
+
+    savename_for_results = NARDINI_ZIPFILE_SAVENAME_FORMAT % next_version
+    print(previous_nardini_results, savename_for_results)
+    return savename_for_results
+
+
 def export_analysis(to_export):
-    random_string = str(''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10)))
-    zip_filename = f'nardini-data-{random_string}.zip'
+    zip_filename = determine_savename_from_previous_results()
     zip_filepath = os.path.join(zip_filename)
     zfile = ZipFile(zip_filepath, 'w')
 
