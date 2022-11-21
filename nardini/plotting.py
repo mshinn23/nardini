@@ -35,8 +35,8 @@ def plot_zscore_matrix(seq_name, zvec_db, typeall, index, savename, is_scrambled
     # Write out the values to the updated image. Note that numpy is row-major!
     for row in range(num_types):
         for col in range(num_types):
-            value = z_matrix[row, col]
-            if value >= plot_limit:
+            value = reshaped_zvec_db[row, col]
+            if abs(value) >= plot_limit:
                 ax.text(col, row, '%.2f' % value, ha="center", va="center", color="black")
 
     fig.savefig(savename)

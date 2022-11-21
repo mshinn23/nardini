@@ -35,6 +35,8 @@ optional arguments:
                         None)
   -n NUM_SCRAMBLED_SEQUENCES, --num-scrambled-sequences NUM_SCRAMBLED_SEQUENCES
                         The number of sequences to generate while bootstrapping. (default: 100000)
+  -t NUM_AMINO_ACID_TYPES, --num-amino-acid-types NUM_AMINO_ACID_TYPES
+                        The number of amino acid type groupings. (default: 8)
 ```
 
 If one had several IDR fastas saved to a file, e.g. `my_fastas.fsa`, then one can perform the analysis using the default options via: `nardini my_fastas.fsa`. If analysis on a sequence is needed (i.e. no FASTA header), such an analysis can be performed by passing the sequence directly to the script. For e.g.: `nardini PRQEFEVMEDHAGTYGLGDRKDQGGYTMHQ`.
@@ -56,7 +58,8 @@ To perform the Nardini z-score analysis and obtain its corresponding files and p
 import os
 import time
 from Bio import SeqIO
-from nardini.core import NUM_SCRAMBLED_SEQUENCES, typeall
+from io import StringIO
+from nardini.core import NUM_SCRAMBLED_SEQUENCES, typeall, typeall_9x9
 from nardini.score_and_plot import calculate_zscore_and_plot
 
 
@@ -84,7 +87,9 @@ elif type(sequence_or_filename) is str:
 # After preparing the sequences, we can finally perform the calculations and save
 # the analysis. Here, `typeall` refers to the coarse-graining of amino acids by a given
 # type to improve the search of similar sequences. The default number of types is
-# 8:
+# 8. However, a 9x9 grouping is also available where Histidine is moved from the 
+# Polar amino acids into its own grouping. If that grouping is desired, the user
+# can use `typeall_9x9` instead.
 #
 # pol = ['S','T','N','Q','C','H']
 # hyd = ['I','L','M','V']
