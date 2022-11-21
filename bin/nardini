@@ -10,7 +10,7 @@ from Bio import SeqIO
 from io import StringIO
 from datetime import datetime
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
-from nardini.core import NUM_SCRAMBLED_SEQUENCES, typeall
+from nardini.core import NUM_SCRAMBLED_SEQUENCES, typeall, typeall_8x8, typeall_9x9
 from nardini.utils import parallelize
 from nardini.score_and_plot import calculate_zscore_and_plot
 
@@ -87,12 +87,25 @@ def main():
                         help='The number of sequences to generate while bootstrapping.',
                         type=int,
                         default=NUM_SCRAMBLED_SEQUENCES)
+    
+    parser.add_argument('-t', '--num-amino-acid-types',
+                        help='The number of amino acid type groupings.',
+                        type=int,
+                        default=len(typeall))
 
     args = parser.parse_args()
     random_seed = set_random_seed(args.random_seed)
+    
+    amino_acid_groupings = typeall
+    if args.num_amino_acid_types <= 0:
+        raise RuntimeError('Error: the number of amino acid types cannot be less than or equal to 0.')
+    elif args.num_amino_acid_types > len(typeall_9x9):
+        raise RuntimeError(f'Error: the number of amino acid types cannot be more than {len(typeall_9x9)}.')
+    elif args.num_amino_acid_types == len(typeall_9x9):
+        amino_acid_groupings = typeall_9x9
 
     seq_records = validate_sequences(args.sequences)
-    calculate_zscore_and_plot(seq_records, typeall, args.num_scrambled_sequences, random_seed)
+    calculate_zscore_and_plot(seq_records, amino_acid_groupings, args.num_scrambled_sequences, random_seed)
 
 
 

@@ -40,8 +40,11 @@ def export_analysis(to_export):
         zfile.write(zplot, os.path.basename(zplot))
         zfile.write(splot, os.path.basename(splot))
 
-        z_content = tabulate(zm, ['µ', 'h', '+', '-', 'π', 'A', 'P', 'G'], tablefmt='plain')
-        s_content = tabulate(sm, ['µ', 'h', '+', '-', 'π', 'A', 'P', 'G'], tablefmt='plain')
+        labels = ['µ', 'h', '+', '-', 'π', 'A', 'P', 'G']
+        if zm.shape[0] == 9:
+            labels = ['µ', 'h', '+', '-', 'π', 'A', 'P', 'G', 'H']
+        z_content = tabulate(zm, labels, tablefmt='plain')
+        s_content = tabulate(sm, labels, tablefmt='plain')
         zfile.writestr(f'zscore-original-sequence-{seq_id}.tsv', z_content)
         zfile.writestr(f'zscore-scrambled-sequence-{seq_id}.tsv', s_content)
 
@@ -63,6 +66,8 @@ def calculate_zscore_and_plot(orthseqs, typeall, num_seqs, random_seed):
     all_zscore_plots = list()
     all_zscore_scrambled_plots = list()
     to_export = dict()
+    print(f'Number of types used for Nardini z-score analysis: {tlen}')
+    print(f'Type groupings used for Nardini z-score analysis: {typeall}')
     for seq_record in orthseqs:
         seq_name = str(seq_record.id)
         myseq = str(seq_record.seq)
@@ -80,7 +85,7 @@ def calculate_zscore_and_plot(orthseqs, typeall, num_seqs, random_seed):
         myarr = get_org_seq_vals(myseq, typeall, fracsall)
         print(f'[ SEQ: {seq_name} | 2 / 8 ] Analysis of original sequence complete.')
 
-        # Returns mean of scrambles, std of scrambles, all values in a number of scramble x 64 list, and all scramble sequences
+        # Returns mean of scrambles, std of scrambles, all values in a number of scramble x tlen**2 list, and all scramble sequences
         print(f'[ SEQ: {seq_name} | 3 / 8 ] Performing analysis of {num_seqs} scrambled sequences: mean, stddev, etc...')
         alpha, amean, avar, allscrvals, allscrseqs = get_scramble_seqs_vals(myseq, num_seqs, typeall, fracsall, random_seed)
         print(f'[ SEQ: {seq_name} | 4 / 8 ] Statistical analysis complete.')
@@ -93,14 +98,14 @@ def calculate_zscore_and_plot(orthseqs, typeall, num_seqs, random_seed):
         # Find most similar scramble
         val, idx = min((val, idx) for (idx, val) in enumerate(difffromseq))
 
-        # Create 8x8 matrix of original sequence
+        # Create nxn matrix of original sequence
         for x in range(0, myarr.shape[1]):
             if myarr[0, x] == 0:
                 zvecdb[countseqs, x] = 0
             else:
                 zvecdb[countseqs, x] = (myarr[0, x] - amean[x]) / math.sqrt(avar[x])
 
-        # Create 8x8 matrix of most similar scramble
+        # Create an nxn matrix of most similar scramble
         for x in range(0, len(allscrvals[idx])):
             if allscrvals[idx, x] == 0:
                 zvecdbscr[countseqs, x] = 0
@@ -142,6 +147,8 @@ def calculate_zscore(orthseqs, typeall, num_seqs, random_seed):
     start       = datetime.now()
 
     to_export = dict()
+    print(f'Number of types used for Nardini z-score analysis: {tlen}')
+    print(f'Type groupings used for Nardini z-score analysis: {typeall}')
     for seq_record in orthseqs:
         seq_name = str(seq_record.id)
         myseq = str(seq_record.seq)
@@ -159,7 +166,7 @@ def calculate_zscore(orthseqs, typeall, num_seqs, random_seed):
         myarr = get_org_seq_vals(myseq, typeall, fracsall)
         print(f'[ SEQ: {seq_name} | 2 / 4 ] Analysis of original sequence complete.')
 
-        # Returns mean of scrambles, std of scrambles, all values in a number of scramble x 64 list, and all scramble sequences
+        # Returns mean of scrambles, std of scrambles, all values in a number of scramble x tlen**2 list, and all scramble sequences
         print(f'[ SEQ: {seq_name} | 3 / 4 ] Performing analysis of {num_seqs} scrambled sequences: mean, stddev, etc...')
         alpha, amean, avar, allscrvals, allscrseqs = get_scramble_seqs_vals(myseq, num_seqs, typeall, fracsall, random_seed)
         print(f'[ SEQ: {seq_name} | 4 / 4 ] Statistical analysis complete.')
@@ -172,14 +179,14 @@ def calculate_zscore(orthseqs, typeall, num_seqs, random_seed):
         # Find most similar scramble
         val, idx = min((val, idx) for (idx, val) in enumerate(difffromseq))
 
-        # Create 8x8 matrix of original sequence
+        # Create an nxn matrix of original sequence
         for x in range(0, myarr.shape[1]):
             if myarr[0, x] == 0:
                 zvecdb[countseqs, x] = 0
             else:
                 zvecdb[countseqs, x] = (myarr[0, x] - amean[x]) / math.sqrt(avar[x])
 
-        # Create 8x8 matrix of most similar scramble
+        # Create an nxn matrix of most similar scramble
         for x in range(0, len(allscrvals[idx])):
             if allscrvals[idx, x] == 0:
                 zvecdbscr[countseqs, x] = 0

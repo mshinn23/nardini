@@ -10,7 +10,7 @@ bootstrapped sequences.""".split())
 setup(
     name='nardini',
     description=description,
-    version='1.0.0-alpha',
+    version='1.1',
     author='Min Kyung Shinn, Kiersten Ruff',
     author_email='mshinn@wustl.edu, kiersten.ruff@wustl.edu',
     maintainer='Jared Lalmansingh',
