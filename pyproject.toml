@@ -1,0 +1,63 @@
+[build-system]
+requires = ["setuptools>=50.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nardini"
+version = "1.1.0"
+description = """Nardini is a Python package for IDP sequences
+that generates similar sequences derived from a statistical analysis of
+residue-specific asymmetries across short blob sizes, calculated across
+bootstrapped sequences."""
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [
+    {name = "Min Kyung Shinn", email = "mshinn@wustl.edu"},
+    {name = "Megan Cohan", email = "mcohan@wustl.edu" },
+    {name = "Kiersten Ruff", email = "kiersten.ruff@wustl.edu"},
+]
+maintainers = [
+    {name = "Jared Lalmansingh", email = "jared.lalmansingh@wustl.edu"},
+]
+classifiers = [
+    "Natural Language :: English",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Operating System :: OS Independent",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Programming Language :: Python :: 3.5",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+keywords = [
+    "bioinformatics",
+    "sequence analysis",
+    "intrinsically disordered proteins",
+    "IDPs",
+    "z-score"
+]
+dependencies = [
+    'BioPython>=1.75',
+    'matplotlib>=3.3',
+    'numpy>=1.19',
+    'scipy<1.7',
+    'pandas>=1.2',
+    'tabulate>=0.8'
+]
+requires-python = ">=3.5"
+
+
+[project.scripts]
+nardini = "nardini.__main__:main"
+
+
+[project.urls]
+homepage = "https://github.com/mshinn23/nardini"
+repository = "https://github.com/mshinn23/nardini.git"
+issues = "https://github.com/mshinn23/nardini/issues"
+

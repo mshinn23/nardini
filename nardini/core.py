@@ -4,27 +4,6 @@ import random
 import scipy.stats as stats
 
 
-NUM_SCRAMBLED_SEQUENCES = 100000
-
-
-pol  = ['S','T','N','Q','C','H']
-pol9 = ['S','T','N','Q','C']
-hyd  = ['I','L','M','V']
-pos  = ['R','K']
-neg  = ['E','D']
-aro  = ['F','W','Y']
-ala  = ['A']
-pro  = ['P']
-gly  = ['G']
-his  = ['H']
-
-
-# We use a tuple since this should be immutable
-typeall_8x8 = (pol, hyd, pos, neg, aro, ala, pro, gly)
-typeall_9x9 = (pol9, hyd, pos, neg, aro, ala, pro, gly, his)
-typeall     = typeall_8x8
-
-
 def count_residues_in_sequence(sequence, residue_types):
     residue_count = 0
     for residue in residue_types:

@@ -5,10 +5,12 @@ import string
 import random
 import numpy as np
 import pandas as pd
+from pprint import pprint
 from datetime import datetime
 from zipfile import ZipFile
 from tabulate import tabulate
-from nardini.core import count_residues_in_sequence, typeall
+from nardini.constants import MAPPING_8x8, MAPPING_9x9, LABELS_8x8, LABELS_9x9
+from nardini.core import count_residues_in_sequence
 from nardini.core import get_org_seq_vals, get_scramble_seqs_vals
 from nardini.plotting import plot_zscore_matrix
 
@@ -40,9 +42,9 @@ def export_analysis(to_export):
         zfile.write(zplot, os.path.basename(zplot))
         zfile.write(splot, os.path.basename(splot))
 
-        labels = ['µ', 'h', '+', '-', 'π', 'A', 'P', 'G']
+        labels = LABELS_8x8
         if zm.shape[0] == 9:
-            labels = ['µ', 'h', '+', '-', 'π', 'A', 'P', 'G', 'H']
+            labels = LABELS_9x9
         z_content = tabulate(zm, labels, tablefmt='plain')
         s_content = tabulate(sm, labels, tablefmt='plain')
         zfile.writestr(f'zscore-original-sequence-{seq_id}.tsv', z_content)
@@ -53,6 +55,24 @@ def export_analysis(to_export):
     zfile.writestr('sequences.tsv', tsv_content)
     zfile.close()
     print(f'Analysis results saved to: "{zip_filename}"')
+
+
+def print_amino_acid_groupings_header(typeall):
+    mapping = None
+    if len(typeall) == len(MAPPING_8x8):
+        mapping = MAPPING_8x8
+
+    elif len(typeall) == len(MAPPING_9x9):
+        mapping = MAPPING_9x9
+
+    length = max(map(len, mapping))
+    padding = 5
+    space = length + padding
+    for group_name, group in mapping.items():
+        name = '\t\t{0:{space}}'.format(group_name, space=space)
+        group_ouput = f'{sorted(group)}'
+        print(name + group_ouput)
+    print()
 
 
 def calculate_zscore_and_plot(orthseqs, typeall, num_seqs, random_seed):
@@ -66,15 +86,19 @@ def calculate_zscore_and_plot(orthseqs, typeall, num_seqs, random_seed):
     all_zscore_plots = list()
     all_zscore_scrambled_plots = list()
     to_export = dict()
-    print(f'Number of types used for Nardini z-score analysis: {tlen}')
-    print(f'Type groupings used for Nardini z-score analysis: {typeall}')
+    print(f'Number of amino acid groupings used for Nardini z-score analysis: {tlen}', end='\n\n')
+    print(f'Amino acid groupings used for Nardini z-score analysis: ', end='\n\n')
+    print_amino_acid_groupings_header(typeall)
+
     for seq_record in orthseqs:
         seq_name = str(seq_record.id)
         myseq = str(seq_record.seq)
         fracsall = list()
         countseqs = countseqs + 1
 
-        print(f'[ SEQ: {seq_name} | START ] Beginning analysis of FASTA sequence: "{seq_name}"...')
+        print('=' * 80, end='\n\n')
+        print(f'[ FASTA {seq_name} : {myseq} ]')
+        print(f'[ SEQ: {seq_name} | START ] Beginning analysis of FASTA sequence: "{seq_name}"...', end='\n\n')
 
         for type1 in typeall:
             count = count_residues_in_sequence(myseq, type1)
@@ -147,15 +171,19 @@ def calculate_zscore(orthseqs, typeall, num_seqs, random_seed):
     start       = datetime.now()
 
     to_export = dict()
-    print(f'Number of types used for Nardini z-score analysis: {tlen}')
-    print(f'Type groupings used for Nardini z-score analysis: {typeall}')
+    print(f'Number of amino acid groupings used for Nardini z-score analysis: {tlen}', end='\n\n')
+    print(f'Amino acid groupings used for Nardini z-score analysis: ', end='\n\n')
+    print_amino_acid_groupings_header(typeall)
+    
     for seq_record in orthseqs:
         seq_name = str(seq_record.id)
         myseq = str(seq_record.seq)
         fracsall = list()
         countseqs = countseqs + 1
 
-        print(f'[ SEQ: {seq_name} | START ] Beginning analysis of FASTA sequence: "{seq_name}"...')
+        print('=' * 80, end='\n\n')
+        print(f'[ FASTA {seq_name} : {myseq} ]')
+        print(f'[ SEQ: {seq_name} | START ] Beginning analysis of FASTA sequence: "{seq_name}"...', end='\n\n')
 
         for type1 in typeall:
             count = count_residues_in_sequence(myseq, type1)

@@ -1,95 +1,111 @@
 # Overview
 
-This repository houses a Python 3 package that implements the Nardini method of uncovering non-random binary patterns within IDRs, as described in the paper: [Uncovering Non-random Binary Patterns Within Sequences of Intrinsically Disordered Proteins](https://doi.org/10.1016/j.jmb.2021.167373).
+This repository contains a pure Python 3 package that implements the Nardini method of uncovering non-random binary patterns within IDRs, as described in the paper: [Uncovering Non-random Binary Patterns Within Sequences of Intrinsically Disordered Proteins](https://doi.org/10.1016/j.jmb.2021.167373).
 
-The Python package provides two interfaces: a command-line script `nardini`, and a programmatic interface for the development of more complex analysis or programs.
+Two interfaces are provided: 1) a command-line script `nardini`; and, 2) a programmatic interface for the development of analysis pipelines and programs.
 
 # Installation
 
-This package can be installed in two ways: `setup.py` and `pip`. The following commands can also be run in a virtual Python environment (e.g. one created using [venv](https://docs.python.org/3/library/venv.html) and related tools, or with [Anaconda](https://www.anaconda.com/)). Although this package can be installed to the System's Python installation root (e.g. `/usr/bin/python3`) it is recommended to install the package in a virtual environment. If the installation is performed on the System Python, administrator permissions may be required (e.g. prepending `sudo` on a Linux/Mac system, or granting approval via Window's UAC).
+This package can be installed in one of three ways: `setuptools`, `pip`, or `conda`. UNIX and Unix-like systems (Linux) are supported natively, and can be installed as described in their respective subsections below.
 
-## Setup.py
-
-To install this package using `setup.py`, download a zip of this repository or clone it with git (i.e. `git clone https://github.com/mshinn23/nardini.git`). After uncompressing the ZIP archive or after cloning the repository, change to the sub-directory where `setup.py` is present. Then, run: `python setup.py install`. Any requisite packages and dependencies such as BioPython, will be download and installed.
+Windows is a special case, as the Windows Subsystem for Linux (WSL) is the recommended means of managing `nardini` installations. To install and configure WSL, one can follow this excellent guide from [How-To Geek](https://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/).
 
 ## PIP
 
-To install the package with `pip`, this can be performed via: `pip install git+https://github.com/mshinn23/nardini.git`.
+To install the package with `pip`, this can be performed via: `pip install nardini`. Although this package can be installed to the System's Python installation root (e.g. `/usr/bin/python3`) it is recommended to install the package in a virtual environment. One created using [venv](https://docs.python.org/3/library/venv.html) and related tools, or with [Anaconda](https://www.anaconda.com/). 
+
+If the installation is performed on the System Python, administrator permissions may be required (e.g. prepending `sudo` on a Linux/Mac system, or granting approval via Window's UAC).
+
+## CONDA
+
+Similar to `pip`, this package can be installed via `conda install nardini`. Note that since Anaconda also supports [interoperability with pip](https://docs.conda.io/projects/conda/en/latest/user-guide/configuration/pip-interoperability.html), `nardini` could be installed into an Anaconda environment using `pip`. However, as this feature is experimental, installation via this method may be bug prone.
+
+## Setuptools
+
+To install this package using `setuptools` download a zip of this repository or clone it with git (i.e. `git clone https://github.com/mshinn23/nardini.git`). After uncompressing the ZIP archive or after cloning the repository, change to the sub-directory where `pyproject.toml` is present. Then, run: `python install .` to build and install the package. Any requisite packages and dependencies such as BioPython, will be automatically downloaded and installed.
+
+This approach is preferred for development use as it allows the user the capability to make edits to the package as needed. In such a scenario, the package should be installed via `pip install -e .` (i.e. an editable install), which allows changes to the source code to be made immediately available for testing purposes.
+
 
 # Command-Line Usage
 
-Upon installation of the Python package, a command-line tool, `nardini` is made available. This can be verified by entering `which nardini` in a terminal. That command should report a filepath to a nardini script. Note that Nardini was installed to a virtual environment created by Conda or Python's Virtual Environment, that environment must be active.
+Upon installation of the Python package, a command-line tool, `nardini` is made available. This can be verified by entering `command -v nardini` or `which nardini` in a terminal. Either command should report a filepath to a nardini script. Note that Nardini was installed to a virtual environment created by Conda or Python's Virtual Environment, that environment must be active.
 
 The `nardini` script has a few options, which are enumerated below. These options can be output by entering `nardini -h`:
 
 ```
-usage: nardini [-h] [-s RANDOM_SEED] [-n NUM_SCRAMBLED_SEQUENCES] sequences
-
-positional arguments:
-  sequences             The sequence, or filename containing FASTA sequences to be analyzed.
+$ nardini -h
+usage: nardini [-h] [--sequences SEQUENCES [SEQUENCES ...]]
+               [--sequences-filename SEQUENCES_FILENAME] [-r RANDOM_SEED]
+               [-n NUM_SCRAMBLED_SEQUENCES] [-t {8,9}]
+               [--fasta-name-prefix FASTA_NAME_PREFIX] [--verbose]
 
 optional arguments:
   -h, --help            show this help message and exit
-  -s RANDOM_SEED, --random-seed RANDOM_SEED
-                        The random seed to use for generating the random distribution. (default:
+  --sequences SEQUENCES [SEQUENCES ...], -s SEQUENCES [SEQUENCES ...]
+                        The sequences to analyze. (default: None)
+  --sequences-filename SEQUENCES_FILENAME, -f SEQUENCES_FILENAME
+                        The filename containing the sequences for analysis. (default:
                         None)
+  -r RANDOM_SEED, --random-seed RANDOM_SEED
+                        The random seed to use for generating the random
+                        distribution. (default: 0)
   -n NUM_SCRAMBLED_SEQUENCES, --num-scrambled-sequences NUM_SCRAMBLED_SEQUENCES
-                        The number of sequences to generate while bootstrapping. (default: 100000)
-  -t NUM_AMINO_ACID_TYPES, --num-amino-acid-types NUM_AMINO_ACID_TYPES
+                        The number of sequences to generate while bootstrapping.
+                        (default: 100000)
+  -t {8,9}, --num-amino-acid-types {8,9}
                         The number of amino acid type groupings. (default: 8)
+  --fasta-name-prefix FASTA_NAME_PREFIX, -p FASTA_NAME_PREFIX
+                        The prefix name to use for generated FASTA records (default:
+                        fasta)
+  --verbose, -v         Output verbose status messages during analysis. (default:
+                        False)
 ```
 
-If one had several IDR fastas saved to a file, e.g. `my_fastas.fsa`, then one can perform the analysis using the default options via: `nardini my_fastas.fsa`. If analysis on a sequence is needed (i.e. no FASTA header), such an analysis can be performed by passing the sequence directly to the script. For e.g.: `nardini PRQEFEVMEDHAGTYGLGDRKDQGGYTMHQ`.
+## Command-Line Examples
+
+If one had several IDR fastas saved to a file, e.g. `my_fastas.fsa`, then one can perform the analysis using the default options via: `nardini -f my_fastas.fsa`. If analysis on several sequences is needed (i.e. no FASTA header), such an analysis can be performed by passing the sequences directly to the script. For e.g.: `nardini -s ASEQUENCE ANOTHERSEQUENCE YETANOTHERSEQUENCE`.
 
 Upon initiating the analysis a report will be generated that includes the number of sequences read as well as the random seed used. Progress on the analysis will be reported to the user. When the analysis is complete, a ZIP file containing both TSV representations of the Nardini analysis and its corresponding plots will be generated in the current directory.
 
-It should be noted that the option to set a `RANDOM_SEED` via `-s` is implemented for generating reproducible runs. If no seed is supplied, a seed is selected and reported to the user, and the analysis proceeds.
+It should be noted that the option to set a `RANDOM_SEED` via `-r` is implemented for generating reproducible runs. If no seed is supplied, a seed is selected using the current timestamp and reported to the user. Analysis then proceeds.
 
-The default number of scrambled sequences (1E5) is not ideal for all sequence lengths. For short sequences (<=8), a smaller number should be used as the analysis is likely to converge to the same outcome regardless of the set `RANDOM_SEED`. For longer sequences (>20), more sequence scrambles should be performed for adequate sampling.
+The default number of scrambled sequences (100,000) is not ideal for all sequence lengths. For short sequences (<=8), a smaller number should be used as the analysis is likely to converge to the same outcome regardless of the chosen `RANDOM_SEED`. For longer sequences (>20), more sequence scrambles should be performed for adequate sampling.
 
 
 # Package Usage Examples
 
-## Simultaneous Analysis and Plots
+These examples illustrate how to use the package to analyze sequences stored as strings or [FASTA](https://en.wikipedia.org/wiki/FASTA_format).
 
-To perform the Nardini z-score analysis and obtain its corresponding files and plots all at once, the following can be done. This example will produce a ZIP file.
+In each case, a filename with a randomly generated name such as `nardini-data-SSDF5M91UQ.zip` will be produced along with PNGs of the Nardini Z-score matrix. The ZIP file will contain the file `sequences.tsv` (the sequences analyzed). And, for every sequence included, 4 files additional will also be included: `regular-<seq_name>.png` (the plot of the Nardini matrix of the original sequence), `scrambled-<seq_name>.png` (the plot of the Nardini matrix of the closest matching scrambled sequence), `zscore-original-sequence-<seq_name>.tsv` (the text file corresponding to the z-score matrix of the original sequence), and `zscore-scrambled-sequence-<seq_name>.tsv` (the text file corresponding to the z-score matrix of the scrambled sequence).
+
+## Simultaneous Analysis and Plots - Sequence strings
+
+To perform the Nardini z-score analysis and obtain its corresponding files and plots all at once given input sequences only, the following can be done.
 
 ```
 import os
 import time
 from Bio import SeqIO
 from io import StringIO
-from nardini.core import NUM_SCRAMBLED_SEQUENCES, typeall, typeall_9x9
+from nardini.constants import NUM_SCRAMBLED_SEQUENCES, TYPEALL, TYPEALL_9x9
 from nardini.score_and_plot import calculate_zscore_and_plot
-
+from nardini.utils import read_sequences_from_string_list
 
 # Define a random seed based on the current time.
 # If a reproducible run is required, replace `int(time.time())`
 # with an integer of one's choice.
 RANDOM_SEED = int(time.time())
-sequence_or_filename = 'your_sequence_or_path_here'
-sequences = list()
+prefix_name = 'fasta'
+sequences = ['YOURSEQUENCE', 'ANOTHERSEQUENCE']
+fasta_sequences = read_sequences_from_string_list(sequences, prefix_name)
 
-
-# Prepare the sequences by using BioPython to read in FASTA records
-# Or, create a fasta record from the sequence.
-if os.path.exists(sequence_or_filename):
-    with open(sequence_or_filename, 'r') as seqfile:
-        sequences = list(SeqIO.parse(seqfile, 'fasta'))
-
-elif type(sequence_or_filename) is str:
-    # This means that we have to create a fake record using the sequence content.
-    seq = sequence_or_filename[:]
-    fasta = f'>fasta-1\n{seq}'
-    fasta_record = SeqIO.read(StringIO(fasta), 'fasta')
-    sequences.append(fasta_record)
-
-# After preparing the sequences, we can finally perform the calculations and save
-# the analysis. Here, `typeall` refers to the coarse-graining of amino acids by a given
+# After preparing the sequences, we can perform the calculations and save
+# the analysis. Here, `TYPEALL` refers to the coarse-graining of amino acids by a given
 # type to improve the search of similar sequences. The default number of types is
 # 8. However, a 9x9 grouping is also available where Histidine is moved from the 
 # Polar amino acids into its own grouping. If that grouping is desired, the user
-# can use `typeall_9x9` instead.
+# can use `TYPEALL_9x9` instead.
 #
 # pol = ['S','T','N','Q','C','H']
 # hyd = ['I','L','M','V']
@@ -99,20 +115,60 @@ elif type(sequence_or_filename) is str:
 # ala = ['A']
 # pro = ['P']
 # gly = ['G']
-calculate_zscore_and_plot(sequences, typeall, NUM_SCRAMBLED_SEQUENCES, RANDOM_SEED)
+calculate_zscore_and_plot(fasta_sequences, TYPEALL, NUM_SCRAMBLED_SEQUENCES, RANDOM_SEED)
 ```
 
-This example will produce a filename with a randomly generated name such as: `nardini-data-SSDF5M91UQ.zip`. The ZIP file will contain the file `sequences.tsv` (the sequences analyzed). And, for every sequence included, 4 files additional will also be included: `regular-<seq_name>.png` (the plot of the Nardini matrix of the original sequence), `scrambled-<seq_name>.png` (the plot of the Nardini matrix of the closest matching scrambled sequence), `zscore-original-sequence-<seq_name>.tsv` (the text file corresponding to the z-score matrix of the original sequence), and `zscore-scrambled-sequence-<seq_name>.tsv` (the text file corresponding to the z-score matrix of the scrambled sequence).
+## Simultaneous Analysis and Plots - FASTA
 
-## Isolated Analysis
-
-This scenario is suited for a case where the user desires to perform additional analysis on the Nardini z-score matrices.
+In the case where the sequences are in [FASTA format](https://en.wikipedia.org/wiki/FASTA_format), the following illustrates how they can be analyzed:
 
 ```
 import os
 import time
 from Bio import SeqIO
-from nardini.core import NUM_SCRAMBLED_SEQUENCES, typeall
+from io import StringIO
+from nardini.constants import NUM_SCRAMBLED_SEQUENCES, TYPEALL, TYPEALL_9x9
+from nardini.score_and_plot import calculate_zscore_and_plot
+from nardini.utils import read_sequences_from_filename
+
+# Define a random seed based on the current time.
+# If a reproducible run is required, replace `int(time.time())`
+# with an integer of one's choice.
+RANDOM_SEED = int(time.time())
+prefix_name = 'fasta'
+filename = 'mysequences.fasta'
+fasta_sequences = read_sequences_from_filename(filename, prefix_name)
+
+# After preparing the sequences, we can perform the calculations and save
+# the analysis. Here, `TYPEALL` refers to the coarse-graining of amino acids by a given
+# type to improve the search of similar sequences. The default number of types is
+# 8. However, a 9x9 grouping is also available where Histidine is moved from the 
+# Polar amino acids into its own grouping. If that grouping is desired, the user
+# can use `TYPEALL_9x9` instead.
+#
+# pol = ['S','T','N','Q','C','H']
+# hyd = ['I','L','M','V']
+# pos = ['R','K']
+# neg = ['E','D']
+# aro = ['F','W','Y']
+# ala = ['A']
+# pro = ['P']
+# gly = ['G']
+calculate_zscore_and_plot(fasta_sequences, TYPEALL, NUM_SCRAMBLED_SEQUENCES, RANDOM_SEED)
+```
+
+## Isolated Analysis
+
+This scenario is suited for a case where the user desires to perform additional analysis on the Nardini z-score matrices, or where only the analysis is needed - plots are excluded.
+
+```
+import os
+import time
+from pprint import pprint
+from Bio import SeqIO
+from io import StringIO
+from nardini.constants import NUM_SCRAMBLED_SEQUENCES, TYPEALL, TYPEALL_9x9
+from nardini.utils import read_sequences_from_filename
 from nardini.score_and_plot import calculate_zscore
 
 
@@ -120,20 +176,9 @@ from nardini.score_and_plot import calculate_zscore
 # If a reproducible run is required, replace `int(time.time())`
 # with an integer of one's choice.
 RANDOM_SEED = int(time.time())
-sequence_or_filename = 'your_sequence_or_path_here'
-sequences = list()
-
-
-if os.path.exists(sequence_or_filename):
-    with open(sequence_or_filename, 'r') as seqfile:
-        sequences = list(SeqIO.parse(seqfile, 'fasta'))
-
-elif type(sequence_or_filename) is str:
-    # This means that we have to create a fake record using the sequence content.
-    seq = sequence_or_filename[:]
-    fasta = f'>fasta-1\n{seq}'
-    fasta_record = SeqIO.read(StringIO(fasta), 'fasta')
-    sequences.append(fasta_record)
+prefix_name = 'fasta'
+filename = 'mysequences.fasta'
+fasta_sequences = read_sequences_from_filename(filename, prefix_name)
 
 # Analyze the sequence(s) only.
 #
@@ -146,9 +191,11 @@ elif type(sequence_or_filename) is str:
 # 4. The `reshaped_zvecdb` corresponding to the original sequence.
 # 5. The `reshaped_zvecdbscr` corresponding to the scrambled sequences.
 #
-# Here, `typeall` refers to the coarse-graining of amino acids by a given
+# Here, `TYPEALL` refers to the coarse-graining of amino acids by a given
 # type to improve the search of similar sequences. The default number of types is
-# 8:
+# 8. However, a 9x9 grouping is also available where Histidine is moved from the 
+# Polar amino acids into its own grouping. If that grouping is desired, the user
+# can use `TYPEALL_9x9` instead.
 #
 # pol = ['S','T','N','Q','C','H']
 # hyd = ['I','L','M','V']
@@ -158,10 +205,11 @@ elif type(sequence_or_filename) is str:
 # ala = ['A']
 # pro = ['P']
 # gly = ['G']
-data_to_export = calculate_zscore(sequences, typeall, NUM_SCRAMBLED_SEQUENCES, RANDOM_SEED)
+data_to_export = calculate_zscore(fasta_sequences, TYPEALL, NUM_SCRAMBLED_SEQUENCES, RANDOM_SEED)
+pprint(data_to_export)
 ```
 
-# Citation
+# Citing
 
 If you use the Nardini package for scientific research that will be published, please cite it. For e.g., the BibTeX entry for the Nardini manuscript is:
 
