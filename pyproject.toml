@@ -1,14 +1,12 @@
 [build-system]
-requires = ["setuptools>=50.0.0", "wheel"]
+requires = ["setuptools>=50.0.0", "setuptools-scm", "wheel"]
 build-backend = "setuptools.build_meta"
+
 
 [project]
 name = "nardini"
-version = "1.1.0"
-description = """Nardini is a Python package for IDP sequences
-that generates similar sequences derived from a statistical analysis of
-residue-specific asymmetries across short blob sizes, calculated across
-bootstrapped sequences."""
+version = "1.1.1"
+description = """Nardini is a Python package for IDP sequences that generates similar sequences derived from a statistical analysis of residue-specific asymmetries across short blob sizes, calculated across bootstrapped sequences."""
 readme = "README.md"
 license = { file = "LICENSE" }
 authors = [
@@ -50,6 +48,10 @@ dependencies = [
     'tabulate>=0.8'
 ]
 requires-python = ">=3.5"
+
+
+[tools.setuptools]
+packages = ["nardini"]
 
 
 [project.scripts]

@@ -6,7 +6,7 @@ Two interfaces are provided: 1) a command-line script `nardini`; and, 2) a progr
 
 # Installation
 
-This package can be installed in one of three ways: `setuptools`, `pip`, or `conda`. UNIX and Unix-like systems (Linux) are supported natively, and can be installed as described in their respective subsections below.
+This package can be installed in one of two ways: `pip`, or `conda`. UNIX and Unix-like systems (Linux) are supported natively, and can be installed as described in their respective subsections below.
 
 Windows is a special case, as the Windows Subsystem for Linux (WSL) is the recommended means of managing `nardini` installations. To install and configure WSL, one can follow this excellent guide from [How-To Geek](https://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/).
 
@@ -16,15 +16,16 @@ To install the package with `pip`, this can be performed via: `pip install nardi
 
 If the installation is performed on the System Python, administrator permissions may be required (e.g. prepending `sudo` on a Linux/Mac system, or granting approval via Window's UAC).
 
+## PIP - Local Build and Install
+
+To install this package from source, download a zip of the source repository or clone it with `git` (i.e. `git clone https://github.com/mshinn23/nardini.git`). After decompressing the ZIP archive or after cloning the repository, change to the sub-directory where `pyproject.toml` is present. Then, run: `pip install .` to download and install any dependencies, build the package as a wheel, and install it. 
+
+This approach is preferred for development use as it allows the user the capability to make edits to the package as needed. In such a scenario, the package should be installed via `pip install -e .` (i.e. an editable install), which allows changes to the source code to be made immediately available for testing purposes.
+
+
 ## CONDA
 
 Similar to `pip`, this package can be installed via `conda install nardini`. Note that since Anaconda also supports [interoperability with pip](https://docs.conda.io/projects/conda/en/latest/user-guide/configuration/pip-interoperability.html), `nardini` could be installed into an Anaconda environment using `pip`. However, as this feature is experimental, installation via this method may be bug prone.
-
-## Setuptools
-
-To install this package using `setuptools` download a zip of this repository or clone it with git (i.e. `git clone https://github.com/mshinn23/nardini.git`). After uncompressing the ZIP archive or after cloning the repository, change to the sub-directory where `pyproject.toml` is present. Then, run: `python install .` to build and install the package. Any requisite packages and dependencies such as BioPython, will be automatically downloaded and installed.
-
-This approach is preferred for development use as it allows the user the capability to make edits to the package as needed. In such a scenario, the package should be installed via `pip install -e .` (i.e. an editable install), which allows changes to the source code to be made immediately available for testing purposes.
 
 
 # Command-Line Usage
