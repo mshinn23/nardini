@@ -25,7 +25,7 @@ This approach is preferred for development use as it allows the user the capabil
 
 ## CONDA
 
-Similar to `pip`, this package can be installed via `conda install nardini`. Note that since Anaconda also supports [interoperability with pip](https://docs.conda.io/projects/conda/en/latest/user-guide/configuration/pip-interoperability.html), `nardini` could be installed into an Anaconda environment using `pip`. However, as this feature is experimental, installation via this method may be bug prone.
+Similar to `pip`, this package can be installed via `conda install nardini -c conda-forge`. Note that since Anaconda also supports [interoperability with pip](https://docs.conda.io/projects/conda/en/latest/user-guide/configuration/pip-interoperability.html), `nardini` could be installed into an Anaconda environment using `pip`. However, as this feature is experimental, installation via this method may be bug prone.
 
 
 # Command-Line Usage
